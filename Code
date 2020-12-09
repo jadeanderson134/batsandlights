@@ -210,3 +210,249 @@ summary(mixed.lmer1)
 plot(mixed.lmer)
 qqnorm(resid(mixed.lmer))
 qqline(resid(mixed.lmer))
+
+batsbyspecieswide<- batsbyspecieswide[! (batsbyspecieswide$autoid== "CORTOW"),]
+lascinwide<- batsbyspecieswide[! (batsbyspecieswide$autoid== "LASEGA"),]
+lascinwide<- lascinwide[! (lascinwide$autoid== "LASINT"),]
+lascinwide<- lascinwide[! (lascinwide$autoid== "LASNOC"),]
+lascinwide<- lascinwide[! (lascinwide$autoid== "TADBRA"),]
+lascinwide<- lascinwide[! (lascinwide$autoid== "ANTPAL"),]
+lascinwide<- lascinwide[! (lascinwide$autoid== "EUMPER"),]
+lasegawide<- batsbyspecieswide[! (batsbyspecieswide$autoid== "LASCIN"),]
+lasegawide<- lasegawide[! (lasegawide$autoid== "LASINT"),]
+lasegawide<- lasegawide[! (lasegawide$autoid== "LASNOC"),]
+lasegawide<- lasegawide[! (lasegawide$autoid== "TADBRA"),]
+lasegawide<- lasegawide[! (lasegawide$autoid== "ANTPAL"),]
+lasegawide<- lasegawide[! (lasegawide$autoid== "EUMPER"),]
+lasintwide<- batsbyspecieswide[! (batsbyspecieswide$autoid== "LASCIN"),]
+lasintwide<- lasintwide[! (lasintwide$autoid== "LASEGA"),]
+lasintwide<- lasintwide[! (lasintwide$autoid== "LASNOC"),]
+lasintwide<- lasintwide[! (lasintwide$autoid== "TADBRA"),]
+lasintwide<- lasintwide[! (lasintwide$autoid== "ANTPAL"),]
+lasintwide<- lasintwide[! (lasintwide$autoid== "EUMPER"),]
+lasnocwide<- batsbyspecieswide[! (batsbyspecieswide$autoid== "LASCIN"),]
+lasnocwide<- lasnocwide[! (lasnocwide$autoid== "LASEGA"),]
+lasnocwide<- lasnocwide[! (lasnocwide$autoid== "LASINT"),]
+lasnocwide<- lasnocwide[! (lasnocwide$autoid== "TADBRA"),]
+lasnocwide<- lasnocwide[! (lasnocwide$autoid== "ANTPAL"),]
+lasnocwide<- lasnocwide[! (lasnocwide$autoid== "EUMPER"),]
+tadbrawide<- batsbyspecieswide[! (batsbyspecieswide$autoid== "LASCIN"),]
+tadbrawide<- tadbrawide[! (tadbrawide$autoid== "LASEGA"),]
+tadbrawide<- tadbrawide[! (tadbrawide$autoid== "LASINT"),]
+tadbrawide<- tadbrawide[! (tadbrawide$autoid== "LASNOC"),]
+tadbrawide<- tadbrawide[! (tadbrawide$autoid== "ANTPAL"),]
+tadbrawide<- tadbrawide[! (tadbrawide$autoid== "EUMPER"),]
+antpalwide<- batsbyspecieswide[! (batsbyspecieswide$autoid== "LASCIN"),]
+antpalwide<- antpalwide[! (antpalwide$autoid== "LASEGA"),]
+antpalwide<- antpalwide[! (antpalwide$autoid== "LASINT"),]
+antpalwide<- antpalwide[! (antpalwide$autoid== "LASNOC"),]
+antpalwide<- antpalwide[! (antpalwide$autoid== "TADBRA"),]
+antpalwide<- antpalwide[! (antpalwide$autoid== "EUMPER"),]
+
+t.test(lasegawide$n, lasegawide$binarylight, alternative = "two.sided", var.equal = FALSE)
+t.test(lasintwide$n, lasintwide$binarylight, alternative = "two.sided", var.equal = FALSE)
+t.test(lasnocwide$n, lasnocwide$binarylight, alternative = "two.sided", var.equal = FALSE)
+t.test(lascinwide$n, lascinwide$binarylight, alternative = "two.sided", var.equal = FALSE)
+t.test(tadbrawide$n, tadbrawide$binarylight, alternative = "two.sided", var.equal = FALSE)
+t.test(antpalwide$n, antpalwide$binarylight, alternative = "two.sided", var.equal = FALSE)
+tadbrawidenorth<- tadbrawide[! (tadbrawide$site== "6"),]
+tadbrawidenorth<- tadbrawidenorth[! (tadbrawidenorth$site== "5"),]
+t.test(tadbrawidenorth$n, tadbrawidenorth$binarylight, alternative = "two.sided", var.equal = FALSE)
+
+fit2lasega<- glm(binarylight~n+site+Session, data=lasegawide, family="binomial")
+coeftest(fit2lasega)
+hist(lasegawide$n)
+basic.lm.lasega<- lm(n ~ binarylight, data=lasegawide)
+summary(basic.lm.lasega)
+(prelim_plot <- ggplot(lasegawide, aes(x = binarylight, y = n)) +
+    geom_point() +
+    geom_smooth(method = "lm"))
+plot(basic.lm.lasega, which =1)
+plot(basic.lm.lasega, which =2)
+boxplot(n ~ site, data = lasegawide)
+boxplot(n ~ Session, data = lasegawide)
+boxplot(n ~ binarylight, data = lasegawide)
+(colour_plot <-  ggplot(lasegawide, aes(x = binarylight, y = n, colour = Session)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+(colour_plot <-  ggplot(lasegawide, aes(x = binarylight, y = n, colour = site)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+site.lm.lasega <- lm(n ~ binarylight + site, data = lasegawide)
+summary(site.lm.lasega)
+session.lm.lasega <- lm(n ~ binarylight + Session, data = lasegawide)
+summary(session.lm.lasega)
+mixed.lmer.lasega <- lmer(n ~ binarylight + (1|site), data = lasegawide)
+summary(mixed.lmer.lasega)
+ss.lm.lasega <- lm(n ~ binarylight + Session + site, data = lasegawide)
+summary(ss.lm.lasega)
+5.921/(5.921+1.913)
+mixed.lmer1.lasega <- lmer(n ~ binarylight + (1|Session), data = lasegawide)
+summary(mixed.lmer1.lasega)
+7.333/(7.333+2)
+plot(mixed.lmer.lasega)
+plot(mixed.lmer1.lasega)
+qqnorm(resid(mixed.lmer.lasega))
+qqline(resid(mixed.lmer.lasega))
+qqnorm(resid(mixed.lmer1.lasega))
+qqline(resid(mixed.lmer1.lasega))
+
+fit2lasint<- glm(binarylight~n+site+Session, data=lasintwide, family="binomial")
+coeftest(fit2lasint)
+hist(lasintwide$n)
+basic.lm.lasint<- lm(n ~ binarylight, data=lasintwide)
+summary(basic.lm.lasint)
+(prelim_plot <- ggplot(lasintwide, aes(x = binarylight, y = n)) +
+    geom_point() +
+    geom_smooth(method = "lm"))
+plot(basic.lm.lasint, which =1)
+plot(basic.lm.lasint, which =2)
+boxplot(n ~ site, data = lasintwide)
+boxplot(n ~ Session, data = lasintwide)
+boxplot(n ~ binarylight, data = lasintwide)
+(colour_plot <-  ggplot(lasintwide, aes(x = binarylight, y = n, colour = Session)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+(colour_plot <-  ggplot(lasintwide, aes(x = binarylight, y = n, colour = site)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+site.lm.lasint <- lm(n ~ binarylight + site, data = lasintwide)
+summary(site.lm.lasint)
+session.lm.lasint <- lm(n ~ binarylight + Session, data = lasintwide)
+summary(session.lm.lasint)
+ss.lm.lasint <- lm(n ~ binarylight + Session + site, data = lasintwide)
+summary(ss.lm.lasint)
+mixed.lmer.lasint <- lmer(n ~ binarylight + (1|site), data = lasintwide)
+summary(mixed.lmer.lasint)
+0/(0+17.9)
+mixed.lmer1.lasint <- lmer(n ~ binarylight + (1|Session), data = lasintwide)
+summary(mixed.lmer1.lasint)
+0/(0+17.9)
+plot(mixed.lmer.lasint)
+plot(mixed.lmer1.lasint)
+qqnorm(resid(mixed.lmer.lasint))
+qqline(resid(mixed.lmer.lasint))
+qqnorm(resid(mixed.lmer1.lasint))
+qqline(resid(mixed.lmer1.lasint))
+
+fit2lasnoc<- glm(binarylight~n+site+Session, data=lasnocwide, family="binomial")
+coeftest(fit2lasnoc)
+hist(lasnocwide$n)
+basic.lm.lasnoc<- lm(n ~ binarylight, data=lasnocwide)
+summary(basic.lm.lasnoc)
+(prelim_plot <- ggplot(lasnocwide, aes(x = binarylight, y = n)) +
+    geom_point() +
+    geom_smooth(method = "lm"))
+plot(basic.lm.lasnoc, which =1)
+boxplot(n ~ site, data = lasnocwide)
+boxplot(n ~ Session, data = lasnocwide)
+boxplot(n ~ binarylight, data = lasnocwide)
+(colour_plot <-  ggplot(lasnocwide, aes(x = binarylight, y = n, colour = Session)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+(colour_plot <-  ggplot(lasnocwide, aes(x = binarylight, y = n, colour = site)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+site.lm.lasnoc <- lm(n ~ binarylight + site, data = lasnocwide)
+summary(site.lm.lasnoc)
+session.lm.lasnoc <- lm(n ~ binarylight + Session, data = lasnocwide)
+summary(session.lm.lasnoc)
+ss.lm.lasnoc <- lm(n ~ binarylight + Session + site, data = lasnocwide)
+summary(ss.lm.lasnoc)
+mixed.lmer.lasnoc <- lmer(n ~ binarylight + (1|site), data = lasnocwide)
+summary(mixed.lmer.lasnoc)
+9.065/(9.065+20.544)
+mixed.lmer1.lasnoc <- lmer(n ~ binarylight + (1|Session), data = lasnocwide)
+summary(mixed.lmer1.lasnoc)
+0/(0+27.86)
+plot(mixed.lmer.lasnoc)
+plot(mixed.lmer1.lasnoc)
+qqnorm(resid(mixed.lmer.lasnoc))
+qqline(resid(mixed.lmer.lasnoc))
+qqnorm(resid(mixed.lmer1.lasnoc))
+qqline(resid(mixed.lmer1.lasnoc))
+
+fit2tadbra<- glm(binarylight~n+site+Session, data=tadbrawide, family="binomial")
+coeftest(fit2tadbra)
+hist(tadbrawide$n)
+basic.lm.tadbra<- lm(n ~ binarylight, data=tadbrawide)
+summary(basic.lm.tadbra)
+(prelim_plot <- ggplot(tadbrawide, aes(x = binarylight, y = n)) +
+    geom_point() +
+    geom_smooth(method = "lm"))
+plot(basic.lm.tadbra, which =1)
+boxplot(n ~ site, data = tadbrawide)
+boxplot(n ~ Session, data = tadbrawide)
+boxplot(n ~ binarylight, data = tadbrawide)
+(colour_plot <-  ggplot(tadbrawide, aes(x = binarylight, y = n, colour = Session)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+(colour_plot <-  ggplot(tadbrawide, aes(x = binarylight, y = n, colour = site)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+site.lm.tadbra <- lm(n ~ binarylight + site, data = tadbrawide)
+summary(site.lm.tadbra)
+session.lm.tadbra <- lm(n ~ binarylight + Session, data = tadbrawide)
+summary(session.lm.tadbra)
+ss.lm.tadbra <- lm(n ~ binarylight + Session + site, data = tadbrawide)
+summary(ss.lm.tadbra)
+mixed.lmer.tadbra <- lmer(n ~ binarylight + (1|site), data = tadbrawide)
+summary(mixed.lmer.tadbra)
+0/(0+27.03)
+mixed.lmer1.tadbra <- lmer(n ~ binarylight + (1|Session), data = tadbrawide)
+summary(mixed.lmer1.tadbra)
+9.563/(9.563+17.717)
+plot(mixed.lmer.tadbra)
+plot(mixed.lmer1.tadbra)
+qqnorm(resid(mixed.lmer.tadbra))
+qqline(resid(mixed.lmer.tadbra))
+qqnorm(resid(mixed.lmer1.tadbra))
+qqline(resid(mixed.lmer1.tadbra))
+
+fit2lascin<- glm(binarylight~n+site+Session, data=lascinwide, family="binomial")
+coeftest(fit2lascin)
+hist(lascinwide$n)
+basic.lm.lascin<- lm(n ~ binarylight, data=lascinwide)
+summary(basic.lm.lascin)
+(prelim_plot <- ggplot(lascinwide, aes(x = binarylight, y = n)) +
+    geom_point() +
+    geom_smooth(method = "lm"))
+plot(basic.lm.lascin, which =1)
+boxplot(n ~ site, data = lascinwide)
+boxplot(n ~ Session, data = lascinwide)
+boxplot(n ~ binarylight, data = lascinwide)
+(colour_plot <-  ggplot(lascinwide, aes(x = binarylight, y = n, colour = Session)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+(colour_plot <-  ggplot(lascinwide, aes(x = binarylight, y = n, colour = site)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+site.lm.lascin <- lm(n ~ binarylight + site, data = lascinwide)
+summary(site.lm.lascin)
+session.lm.lascin <- lm(n ~ binarylight + Session, data = lascinwide)
+summary(session.lm.lascin)
+ss.lm.lascin <- lm(n ~ binarylight + Session + site, data = lascinwide)
+summary(ss.lm.lascin)
+mixed.lmer.lascin <- lmer(n ~ binarylight + (1|site), data = lascinwide)
+summary(mixed.lmer.lascin)
+0/(0+15.94)
+mixed.lmer1.lascin <- lmer(n ~ binarylight + (1|Session), data = lascinwide)
+summary(mixed.lmer1.lascin)
+1.268/(1.268+14.673)
+plot(mixed.lmer.lascin)
+plot(mixed.lmer1.lascin)
+qqnorm(resid(mixed.lmer.lascin))
+qqline(resid(mixed.lmer.lascin))
+qqnorm(resid(mixed.lmer1.lascin))
+qqline(resid(mixed.lmer1.lascin))
+
