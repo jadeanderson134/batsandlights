@@ -67,6 +67,110 @@ d<- d[! (d$Session== "86"),]
 d2<- d[! (d$autoid== "NoID"),]
 allbats <- d
 batsbyspecies <- d2
+
+ggplot(d2, aes(x=date, fill=species)) + geom_histogram(bins=45) +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) +
+  guides(fill=guide_legend(title="Species Name"))+
+  ggtitle("Species Distribution per Day") + xlab("Date") + ylab("Total Observations")
+ggplot(d2, aes(x=date, fill=species)) + geom_histogram(bins =45) +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) +
+  guides(fill=guide_legend(title="Species Name"))+
+  ggtitle("Species Distribution per Day by Site") + xlab("Date") + ylab("Total Observations") +
+  facet_wrap(~sitename)
+ggplot(d, aes(x=date)) + geom_histogram(bins =45) +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) +
+  ggtitle("Total Bat Activity per Day") + xlab("Date") + ylab("Total Observations")
+ggplot(d, aes(x=date)) + geom_histogram(bins =45) +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) +
+  ggtitle("Total Bat Activity per Day by Site") + xlab("Date") + ylab("Total Observations") +
+  facet_wrap(~sitename)
+ggplot(batsbyspecies, aes(x=date)) + geom_histogram(bins=45) +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) +
+  ggtitle("Species Specific Bat Activity per Day") +xlab("Date") + ylab("Total Observations") +
+  facet_wrap(~species)
+ggplot(batsbyspecies, aes(x=binarylight, fill=species)) + geom_bar(stat="count", position="dodge") +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) + 
+  ggtitle("Species Distribution in High and Low Light Levels by Site") + xlab("Light Levels (0=Dark, 1=Light)") + ylab("Total Observations") +
+  guides(fill=guide_legend(title="Species Name")) + facet_wrap(~sitename)
+ggplot(allbats, aes(x=binarylight)) + geom_bar(stat="count", position="dodge") +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) + 
+  ggtitle("Total Bat Activity in High and Low Light Levels") + xlab("Light Levels (0=Dark, 1=Light)") + ylab("Total Observations")
+ggplot(data=allbats, aes(x = AvgTemp)) +geom_line(stat="count") + ggtitle("Bat Activity vs. Average Hourly Temperature") +
+  xlab("Average Hourly Temperature (°F)") + ylab("Total Observations") 
+ggplot(data=allbats, aes(x = AvgHumidity)) +geom_line(stat="count") + ggtitle("Bat Activity vs. Average Hourly Percent Humidity") +
+  xlab("Average Hourly Percent Humidity") + ylab("Total Observations") 
+ggplot(data=allbats, aes(x = date, y=LightAvg, group=1)) +geom_boxplot() + 
+  theme(axis.text.x = element_text(angle=45, hjust=1, size = 4),) +
+  ggtitle("Average Light Levels per Day by Site") +
+  xlab("Date") + ylab("Average Light (E.V)") +facet_wrap(~site)
+ggplot(data=allbats, aes(x = AvgWindSpeed)) +geom_line(stat="count") + ggtitle("Bat Activity vs. Average Hourly Wind Speed") +
+  xlab("Average Hourly Wind Speed (mph)") + ylab("Total Observations") 
+ggplot(data=allbats, aes(x = date)) +geom_line(stat="count") + ggtitle("Bat Activity Over Time") +
+  xlab("Date") + ylab("Total Observations") 
+ggplot(data=allbats, aes(x = date, y=AvgTemp)) +geom_point() + ggtitle("Average Hourly Temperature Over Time") +
+  xlab("Date") + ylab("Average Hourly Temperature (°F)") 
+ggplot(data=allbats, aes(x = date, y=AvgHumidity)) +geom_point() + ggtitle("Average Percent Humidity Over Time") +
+  xlab("Date") + ylab("Average Percent Humidity") 
+ggplot(data=allbats, aes(x = date, y=AvgWindSpeed)) +geom_point() + ggtitle("Average Hourly Wind Speed Over Time") +
+  xlab("Date") + ylab("Average Hourly Wind Speed (mph)") 
+ggplot(allbats, aes(x=MoonPhase)) + geom_bar(stat="count", position="dodge") +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) + 
+  ggtitle("Total Bat Activity during Moon Cycle") + xlab("Moon Phase") + ylab("Total Observations")
+ggplot(batsbyspecies, aes(x=LightAvg)) + geom_line(stat="count")+ 
+  theme(axis.text.x = element_text(angle=45, hjust=1),) + 
+  ggtitle("Species Distribution by Average Light Level by Site") + xlab("Average Light Levels (E.V)") + ylab("Total Observations") +
+  guides(fill=guide_legend(title="Species Name")) + facet_wrap(~sitename)
+ggplot(d2, aes(x=TimeClass, fill=species)) + geom_histogram(bins=45) +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) +
+  guides(fill=guide_legend(title="Species Name"))+
+  ggtitle("Species Distribution Over Time") + xlab("Time (Thirty Minute Intervals)") + ylab("Total Observations")
+ggplot(d2, aes(x=TimeClass, fill=species)) + geom_histogram(bins=45) +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) +
+  guides(fill=guide_legend(title="Species Name"))+
+  ggtitle("Species Distribution Over Time by Site") + xlab("Time (Thirty Minute Intervals)") + ylab("Total Observations") +
+  facet_wrap(~sitename)
+ggplot(d2, aes(x=TimeClass)) + geom_histogram(bins=45) +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) +
+  ggtitle("Species Distribution Over Time by Species") + xlab("Time (Thirty Minute Intervals)") + ylab("Total Observations") +
+  facet_wrap(~species)
+ggplot(allbats, aes(x=TimeClass)) + geom_histogram(bins=45) +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) +
+  ggtitle("Bat Activity Over Time") + xlab("Time (Thirty Minute Intervals)") + ylab("Total Observations") +
+  facet_wrap(~sitename)
+ggplot(batsbyspecies, aes(x=binarylight, fill=species)) + geom_bar(stat="count", position="dodge") +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) + 
+  ggtitle("Species Distribution in High and Low Light Levels") + xlab("Light Levels (0=Dark, 1=Light)") + ylab("Total Observations") +
+  guides(fill=guide_legend(title="Species Name"))
+ggplot(d2, aes(x=weekday, fill=species)) + geom_histogram(stat="count") +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) +
+  guides(fill=guide_legend(title="Species Name"))+
+  ggtitle("Species Distribution by Week Day") + xlab("Day of Week (1 = Sunday)") + ylab("Total Observations")
+ggplot(d, aes(x=weekday)) + geom_histogram(stat="count") +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) +
+  ggtitle("Bat Activity by Week Day by Site") + xlab("Day of Week (1 = Sunday)") + ylab("Total Observations") +
+  facet_wrap(~sitename)
+intra<- d[ (d$site== "4"),]
+notown<- batsbyspecies[! (batsbyspecies$autoid=="CORTOW"),]
+ggplot(notown, aes(x=date)) + geom_histogram(bins=45) +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) +
+  ggtitle("Species Specific Bat Activity per Day") +xlab("Date") + ylab("Total Observations") +
+  facet_wrap(~species)
+
+ggplot(notown, aes(x=date, fill=species)) + geom_histogram(bins=45) +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) +
+  guides(fill=guide_legend(title="Species Name"))+
+  ggtitle("Species Distribution per Day by Site") + xlab("Date") + ylab("Total Observations") +
+  facet_wrap(~sitename)
+ggplot(notown, aes(x=weekday, fill=species)) + geom_histogram(stat="count") +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) +
+  guides(fill=guide_legend(title="Species Name"))+
+  ggtitle("Species Distribution by Week Day") + xlab("Day of Week (1 = Sunday)") + ylab("Total Observations") +
+  facet_wrap(~sitename)
+ggplot(notown, aes(x=binarylight, fill=species)) + geom_bar(stat="count", position="dodge") +
+  theme(axis.text.x = element_text(angle=45, hjust=1),) + 
+  ggtitle("Species Distribution in High and Low Light Levels by Site") + xlab("Light Levels (0=Dark, 1=Light)") + ylab("Total Observations") +
+  guides(fill=guide_legend(title="Species Name")) + facet_wrap(~sitename)
+  
 allbatswide <- allbats %>% count(binarylight, Session, site)
 allbatswidesite <- allbats %>% count(binarylight, site)
 allbatswideSession <- allbats %>% count(binarylight, Session)
