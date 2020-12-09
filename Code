@@ -456,3 +456,67 @@ qqline(resid(mixed.lmer.lascin))
 qqnorm(resid(mixed.lmer1.lascin))
 qqline(resid(mixed.lmer1.lascin))
 
+allbats4wide <- allbats %>% count(binarylight, LightAvg, Session, site, TimeClass)
+allbats4wide<- allbats4wide[! (allbats4wide$site== "1"),]
+allbats4wide<- allbats4wide[! (allbats4wide$site== "2"),]
+allbats4wide<- allbats4wide[! (allbats4wide$site== "3"),]
+allbats4wide<- allbats4wide[! (allbats4wide$site== "5"),]
+allbats4wide<- allbats4wide[! (allbats4wide$site== "6"),]
+
+allbats4wide<- allbats4wide %>% mutate(After10 = TimeClass)
+allbats4wide<- allbats4wide %>% relocate(After10, binarylight)
+allbats4wide[allbats4wide$'After10' == c('2'), 1] <- 0
+allbats4wide[allbats4wide$'After10' == c('3'), 1] <- 0
+allbats4wide[allbats4wide$'After10' == c('4'), 1] <- 0
+allbats4wide[allbats4wide$'After10' == c('5'), 1] <- 0
+allbats4wide[allbats4wide$'After10' == c('6'), 1] <- 0
+allbats4wide[allbats4wide$'After10' == c('7'), 1] <- 1
+allbats4wide[allbats4wide$'After10' == c('8'), 1] <- 1
+allbats4wide[allbats4wide$'After10' == c('9'), 1] <- 1
+
+t.test(allbats4wide$n, allbats4wide$After10, alternative = "two.sided", var.equal = FALSE) 
+t.test(allbats4wide$n, allbats4wide$binarylight, alternative = "two.sided", var.equal = FALSE)
+
+fit2allbats4wide<- glm(After10~n+LightAvg + Session, data=allbats4wide, family="binomial")
+coeftest(fit2allbats4wide)
+hist(allbats4wide$n)
+basic.lm.allbats4wide<- lm(n ~ After10, data=allbats4wide)
+summary(basic.lm.allbats4wide)
+(prelim_plot <- ggplot(allbats4wide, aes(x = After10, y = n)) +
+    geom_point() +
+    geom_smooth(method = "lm"))
+plot(basic.lm.allbats4wide, which =1)
+boxplot(n ~ LightAvg, data = allbats4wide)
+boxplot(n ~ Session, data = allbats4wide)
+boxplot(n ~ After10, data = allbats4wide)
+(colour_plot <-  ggplot(allbats4wide, aes(x = After10, y = n, colour = Session)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+(colour_plot <-  ggplot(allbats4wide, aes(x = After10, y = n, colour = LightAvg)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+lightavg.lm.allbats4wide <- lm(n ~ After10 + LightAvg, data = allbats4wide)
+summary(lightavg.lm.allbats4wide)
+session.lm.allbats4wide <- lm(n ~ After10 + Session, data = allbats4wide)
+summary(session.lm.allbats4wide)
+ss.lm.allbats4wide <- lm(n ~ After10 + Session + LightAvg, data = allbats4wide)
+summary(ss.lm.allbats4wide)
+mixed.lmer.allbats4wide <- lmer(n ~ After10 + (1|LightAvg), data = allbats4wide)
+summary(mixed.lmer.allbats4wide)
+0/(0+3475)
+mixed.lmer1.allbats4wide <- lmer(n ~ After10 + (1|Session), data = allbats4wide)
+summary(mixed.lmer1.allbats4wide)
+0/(0+3475)
+plot(mixed.lmer.allbats4wide)
+plot(mixed.lmer1.allbats4wide)
+qqnorm(resid(mixed.lmer.allbats4wide))
+qqline(resid(mixed.lmer.allbats4wide))
+qqnorm(resid(mixed.lmer1.allbats4wide))
+qqline(resid(mixed.lmer1.allbats4wide))
+
+install.packages("vegan")
+library(vegan)
+dissts<- allbatswide%>%select(n, binarylight)%>% dist()
+
