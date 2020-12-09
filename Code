@@ -67,7 +67,9 @@ d<- d[! (d$Session== "86"),]
 d2<- d[! (d$autoid== "NoID"),]
 allbats <- d
 batsbyspecies <- d2
+allbatswide <- allbats %>% count(binarylight, Session, site)
 allbatswidesite <- allbats %>% count(binarylight, site)
+allbatswideSession <- allbats %>% count(binarylight, Session)
 install.packages("ggpubr")
 t.test(allbatswide$n, allbatswide$binarylight, alternative = "two.sided", var.equal = FALSE)
 batsbyspecieswide <- batsbyspecies %>% count(binarylight,Session, site, autoid)
