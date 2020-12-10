@@ -595,6 +595,48 @@ ggplot(batsbyspeciesgraph, aes(x=autoid, y=n,)) + geom_boxplot() +
   geom_jitter(alpha=.5, aes(color=binarylight))
 ggplot(batsbyspeciesgraph, aes(x=autoid, y=n,)) + geom_boxplot() +
   geom_jitter(alpha=.5, aes(color=binarylight)) +facet_wrap(~sitename)
+  
+  allbatswidetime <- allbats %>% count(binarylight, LightAvg, Session, date, site, TimeClass)
+fit2time<- glm(binarylight~n+TimeClass + date +site, data=allbatswidetime, family="binomial")
+coeftest(fit2time)
+hist(allbatswidetime$n)
+basic.lm.allbatswidetime<- lm(n ~ binarylight + site + TimeClass +date, data=allbatswidetime)
+summary(basic.lm.allbatswidetime)
+(prelim_plot <- ggplot(allbatswidetime, aes(x = binarylight, y = n)) +
+    geom_point() +
+    geom_smooth(method = "lm"))
+
+plot(basic.lm.allbatswidetime, which =1)
+plot(basic.lm.allbatswidetime, which =2)
+boxplot(n ~ binarylight, data = allbatswidetime)
+boxplot(n ~ site, data = allbatswidetime)
+boxplot(n ~ date, data = allbatswidetime)
+(colour_plot <-  ggplot(allbatswidetime, aes(x = binarylight, y = n, colour = date)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+(colour_plot <-  ggplot(allbatswidetime, aes(x = binarylight, y = n, colour = site)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+time.lm.allbatswidetime <- lm(n ~ binarylight + TimeClass +date, data = allbatswidetime)
+summary(time.lm.allbatswidetime)
+date.lm.allbatswidetime <- lm(n ~ binarylight + date, data = allbatswidetime)
+summary(date.lm.allbatswidetime)
+ss.lm.allbatswidetime <- lm(n ~ binarylight + TimeClass + date, data = allbatswidetime)
+summary(ss.lm.allbatswidetime)
+mixed.lmer.allbatswidetime <- lmer(n ~ binarylight + (1|date), data = allbatswidetime)
+summary(mixed.lmer.allbatswidetime)
+253.6/(253.6+2509.7)
+mixed.lmer1.allbatswidetime <- lmer(n ~ binarylight + (1|TimeClass), data = allbatswidetime)
+summary(mixed.lmer1.allbatswidetime)
+65.1/(65.1+2687.2)
+plot(mixed.lmer.allbatswidetime)
+plot(mixed.lmer1.allbatswidetime)
+qqnorm(resid(mixed.lmer.allbatswidetime))
+qqline(resid(mixed.lmer.allbatswidetime))
+qqnorm(resid(mixed.lmer1.allbatswidetime))
+qqline(resid(mixed.lmer1.allbatswidetime))
 
 
 
