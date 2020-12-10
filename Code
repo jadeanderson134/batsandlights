@@ -518,5 +518,33 @@ qqline(resid(mixed.lmer1.allbats4wide))
 
 install.packages("vegan")
 library(vegan)
-dissts<- allbatswide%>%select(n, binarylight)%>% dist()
+require(MASS)
+require(dplyr)
+dists<- batsbyspecieswide %>% dplyr::select(n, binarylight)%>% dist()
+adonis(dists~autoid,data=batsbyspecieswide)
+SST<-sum(dists^2)/150
+SSW<-batsbyspecieswide%>%group_by(autoid)%>%dplyr::select(n, binarylight)%>%
+  do(d=dist(.[2:3],"euclidean"))%>%ungroup()%>%
+  summarize(sum(d[[1]]^2)/50 +sum(d[[2]]^2)/50+ sum(d[[3]]^2)/50)%>%pull
+f_obs<-((SST-SSW)/2)/(SSW/147)
+Fs<-replicate(1000, {
+  new<-batsbyspecieswide%>%mutate(autoid=sample(autoid))
+  SSW<-new%>%group_by(autoid)%>%dplyr::select(n, binarylight)%>%
+    do(d=dist(.[2:3],"euclidean"))%>%ungroup()%>%
+    summarize(sum(d[[1]]^2)/50 +sum(d[[2]]^2)/50+ sum(d[[3]]^2)/50)%>%pull
+  ((SST-SSW)/2)/(SSW/147)
+})
+{hist(Fs,prob=T); abline(v=f_obs, col="red")}
+mean(Fs>f_obs)
+
+dist<-vegdist(sqrt(allbatswide[,-c(1:2)]),method="bray")
+distM<-vegdist(sqrt(allbatswide[allbatswide$n=="M",-c(1:2)]),method="bray")
+distP<-vegdist(sqrt(allbatswide[allbatswide$n=="P",-c(1:2)]),method="bray")
+SSR<-sum(distM^2)/12+sum(distP^2)/20
+SST<-sum(dist^2)/32
+Fstat<-(SST-SSR)/(SSR/30)
+Fstat
+
+adonis(dist~n, data=allbatswide, method="bray")
+
 
