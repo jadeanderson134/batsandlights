@@ -548,3 +548,53 @@ Fstat
 adonis(dist~n, data=allbatswide, method="bray")
 
 
+fit2light<- glm(LightAvg~n+site+Session, data=allbatswidelight, family=)
+coeftest(fit2light)
+hist(allbatswidelight$n)
+basic.lm.light<- lm(n ~ LightAvg, data=allbatswidelight)
+summary(basic.lm.light)
+(prelim_plot <- ggplot(allbatswidelight, aes(x = LightAvg, y = n)) +
+    geom_point() +
+    geom_smooth(method = "lm"))
+plot(basic.lm.light, which =1)
+plot(basic.lm.light, which =2)
+boxplot(n ~ site, data = allbatswidelight)
+boxplot(n ~ LightAvg, data = allbatswidelight)
+(colour_plot <-  ggplot(allbatswidelight, aes(x = LightAvg, y = n, colour = Session)) +
+    geom_point(size = 2) +
+    theme_classic() +
+    theme(legend.position = "none"))
+site.lm.light <- lm(n ~ LightAvg + site, data = allbatswidelight)
+summary(site.lm.light)
+session.lm.light <- lm(n ~ LightAvg + Session, data = allbatswidelight)
+summary(session.lm.light)
+ss.lm.light <- lm(n ~ LightAvg + Session + site, data = allbatswidelight)
+summary(ss.lm.light)
+mixed.lmer.light <- lmer(n ~ LightAvg + (1|site), data = allbatswidelight)
+summary(mixed.lmer.light)
+1414/(1414+5070)
+mixed.lmer1.light <- lmer(n ~ LightAvg + (1|Session), data = allbatswidelight)
+summary(mixed.lmer1.light)
+570.8/(570.8+5703.2)
+plot(mixed.lmer.light)
+qqnorm(resid(mixed.lmer.light))
+qqline(resid(mixed.lmer.light))
+qqnorm(resid(mixed.lmer1.light))
+qqline(resid(mixed.lmer1.light))
+
+allbatswidegraph <- allbats %>% count(binarylight,Session, site, sitename)
+ggplot(allbatswidegraph, aes(x=sitename, y=n,)) + geom_boxplot() +
+  geom_jitter(alpha=.5, aes(color=binarylight))
+ggplot(allbatswidegraph, aes(x=binarylight, y=n,)) + geom_boxplot() +
+  geom_jitter(alpha=.5, aes(color=sitename)) + facet_wrap(~binarylight)
+
+
+batsbyspeciesgraph <- batsbyspecies %>% count(autoid, binarylight, Session, site, sitename)
+batsbyspeciesgraph<- batsbyspeciesgraph[! (batsbyspeciesgraph$autoid== "CORTOW"),]
+ggplot(batsbyspeciesgraph, aes(x=autoid, y=n,)) + geom_boxplot() +
+  geom_jitter(alpha=.5, aes(color=binarylight))
+ggplot(batsbyspeciesgraph, aes(x=autoid, y=n,)) + geom_boxplot() +
+  geom_jitter(alpha=.5, aes(color=binarylight)) +facet_wrap(~sitename)
+
+
+
