@@ -638,5 +638,36 @@ qqline(resid(mixed.lmer.allbatswidetime))
 qqnorm(resid(mixed.lmer1.allbatswidetime))
 qqline(resid(mixed.lmer1.allbatswidetime))
 
+allbatsn <- allbats %>% group_by(trial) %>% 
+  summarise(n =n(), n_sp = n_distinct(autoid))
+allbatstest<- allbats[!duplicated(allbats$trial), ]
+allbatstest <- bind_cols(dplyr::select(allbatsn, -trial), dplyr::select(allbatstest, -c(infile, autoid, matchratio)))
+View(allbatstest)
+
+t.test(allbatstest$n, allbatstest$binarylight, alternative = "two.sided", var.equal = FALSE)
+t.test(allbatstest$n_sp, allbatstest$binarylight, alternative = "two.sided", var.equal = FALSE)
+
+batsbyspeciesn <- batsbyspecies %>% group_by(trial, autoid) %>% 
+  summarise(n =n())
+batsbyspeciestest<-batsbyspecies%>% group_by(autoid) %>% batsbyspecies[!duplicated(batsbyspecies$trial), ] 
+View(batsbyspeciestest)
+batsbyspeciestest <- bind_cols(dplyr::select(batsbyspeciesn, -c(autoid)), dplyr::select(batsbyspeciestest, -c(infile, trial, matchratio)))
+
+n <- as.numeric(allbatstest$n)
+date <- as.factor(allbatstest$date)
+site<- as.factor(allbatstest$site)
+trial<- as.factor(allbatstest$trial)
+binarylight<- as.factor(allbatstest$binarylight)
+LightAvg <- as.numeric(allbatstest$LightAvg)
+AvgTemp<- as.numeric(allbatstest$AvgTemp)
+AvgWindSpeed<- as.numeric(allbatstest$AvgWindSpeed)
+TimeClass <-as.factor(allbatstest$TimeClass)
+hist(n)
+model<- lmer(n ~ binarylight + site + date +TimeClass + trial + (1 | date:AvgTemp) + (1 | date:AvgWindSpeed), data=allbatstest)
+summary(model)
+library(lme4)
+install.packages("tidymodels")
+library(car)
+Anova(model)
 
 
